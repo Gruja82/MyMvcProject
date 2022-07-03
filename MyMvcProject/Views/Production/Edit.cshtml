@@ -1,0 +1,82 @@
+﻿@using MyMvcProject.Data.Entities
+
+@model ProductionViewModel
+
+@{
+    List<Product> productList = ViewData["Products"] as List<Product>;
+}
+
+<h1 class="text-center">Create new production</h1>
+
+<div style="width:100%">
+    <form asp-action="Create" method="post">
+        <div style="width:50%;float:left">
+            <h4 class="text-center">General Info</h4>
+            <hr class="btn-info mt-3" />
+
+            <div class="form-group">
+                <label>Code</label>
+                <input type="text" asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <hr class="btn-info mt-3" />
+            <div class="form-group">
+                <label>Production Date</label>
+                <input type="date" asp-for="ProductionDate" class="form-control" />
+                <span asp-validation-for="ProductionDate" class="text-danger"></span>
+            </div>
+            <hr class="btn-info mt-3" />
+        </div>
+
+        <div style="width:50%;float:right">
+            <h4 class="text-center">Product List</h4>
+            <hr class="btn-info mt-3" />
+
+            <div class="row">
+                <div style="overflow-y:scroll;height:400px;" class="ml-3">
+                    <div id="productionDetails">
+
+                    </div>
+                </div>
+
+                <div>
+                    <select id="lstProducts" class="form-control-sm ml-3">
+                        @foreach (var product in productList)
+                        {
+                            <option>@product.Name</option>
+                        }
+                    </select>
+
+                    <input id="inputQuantity" class="form-control-sm mt-3 ml-3" />
+                    <input type="button" id="btnAdd" value="Add" onclick="addProductionRow()" class="btn btn-primary rounded ml-3" />
+                </div>
+
+            </div>
+        </div>
+
+        <input readonly class="form-control text-danger" value="@ViewData["Error"]" />
+
+        <div>
+            <input type="submit" value="Create" class="btn btn-primary rounded mt-3" />
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        window.onload = (function() {
+        @if (Model.ProductionDetailsList != null)
+        {
+            @foreach (var item in Model.ProductionDetailsList)
+            {
+                Product productItem = productList.Where(e => e.Name == item.Product).Single();
+                
+                <text>
+                        populateProductionRows("@item.Product", @item.Quantity);
+                </text>
+            }
+        }
+
+                                                        });
+    </script>
+</div>
+
+<script src="~/js/production.js" asp-append-version="true"></script>

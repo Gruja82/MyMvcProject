@@ -1,0 +1,81 @@
+﻿@model ProductViewModel
+
+<h1 class="text-center">Details for "@Model.Name"</h1>
+
+<div class="text-lg-end">
+    <a asp-action="Create" class="btn btn-primary rounded">Create New</a>
+</div>
+
+<div style="width:100%">
+    <div style="width:50%;float:left">
+        <h4 class="text-center">General Info</h4>
+        <hr class="btn-info mt-2" />
+        <div class="row">
+            <div class="form-group">
+                <img src="@Url.Content("/images/Products/" + @Model.ImagePath)" width="200" height="200" id="imgControl" />
+            </div>
+            <hr class="btn-info mt-2" />
+            <div class="form-group">
+                <label>Code</label>
+                <input asp-for="Code" readonly class="form-control" />
+            </div>
+            <hr class="btn-info mt-2" />
+            <div class="form-group">
+                <label>Name</label>
+                <input asp-for="Name" readonly class="form-control" />
+            </div>
+            <hr class="btn-info mt-2" />
+            <div class="form-group">
+                <label>Category</label>
+                <input asp-for="Category" readonly class="form-control" />
+            </div>
+            <hr class="btn-info mt-2" />
+            <div class="form-group">
+                <label>In Stock</label>
+                <input asp-for="InStock" readonly class="form-control" />
+            </div>
+            <hr class="btn-info mt-2" />
+            <div class="form-group">
+                <label>Price</label>
+                <input asp-for="Price" readonly class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div style="width:50%;float:right">
+        <h4 class="text-center">Specification</h4>
+        <div style="overflow-y:scroll;height:400px;" class="ml-3">
+            <div class="row">
+                @for (int i = 0; i < Model.ProductDetailsList.Count; i++)
+                {
+                    <div class="form-group">
+                        <input asp-for="ProductDetailsList[i].Material" readonly class="form-control" />
+                        <input asp-for="ProductDetailsList[i].Quantity" readonly class="form-control" />
+                        <hr class="btn-info mt-3" />
+                    </div>
+
+                }
+            </div>
+        </div>
+        <div class="form-group mt-5">
+
+            Production Cost: <input id="productionCost" readonly value=@ViewData["ProductionCost"] class="form-control" />
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="mt-5">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary rounded">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger rounded">Delete</a>
+</div>
+<div class="mt-5">
+    <a asp-action="Index" class="btn btn-primary rounded">Back to Index</a>
+</div>
+
+
+<script src="~/js/products.js" asp-append-version="true"></script>
+
+
+

@@ -1,0 +1,54 @@
+﻿@model Pagination<CustomerViewModel>
+
+<h1 class="text-center">Customers</h1>
+
+<div class="text-lg-end">
+    <a asp-action="Create" class="btn btn-primary rounded">Create New</a>
+</div>
+
+<div class="tab-content">
+    <form asp-action="Index" method="post">
+        <p>
+            <input type="text" name="searchText" placeholder="Code--Company" />
+            <input type="submit" value="Search" class="btn btn-secondary rounded" />
+        </p>
+        <input type="hidden" id="hfPageIndex" name="pageIndex"/>
+    </form>
+
+    <ul class="list-group">
+        @foreach (var customer in Model.DataList)
+        {
+            <li class="list-group-item list-group-item-action list-group-item-light">
+                <a asp-action="Details" asp-route-id="@customer.Id">
+                    <div class="container-fluid">
+                        <div>
+                            <img src="@Url.Content("/images/Customers/" + customer.LogoPath)" width="100" height="100" id="imgControl"/>
+                        </div>
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td>@customer.Code</td>
+                                    <td>@customer.Company</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+
+<div class="container m-3">
+    @for (int i = 1; i <=Model.PageCount; i++)
+    {
+        @if (i != Model.CurrentPageIndex)
+        {
+            <a class="btn btn-outline-info" href="javascript:PagerClick(@i)">@i</a>
+        }
+        else
+        {
+            <span class="btn btn-info">@i</span>
+        }
+    }
+</div>

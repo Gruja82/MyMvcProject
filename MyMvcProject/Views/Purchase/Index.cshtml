@@ -1,0 +1,62 @@
+﻿@model Pagination<PurchaseViewModel>
+
+@{
+    List<string> suppliers = ViewData["Suppliers"] as List<string>;
+}
+
+<h1 class="text-center">Purchases</h1>
+
+<div class="text-lg-end">
+    <a asp-action="Create" class="btn btn-primary rounded">Create New</a>
+</div>
+
+<div class="tab-content">
+    <form asp-action="Index" method="post">
+        <p>
+            <input type="text" name="searchText" placeholder="Code" />
+            <select name="supplier">
+                <option>Select supplier</option>
+                @foreach (var supplier in suppliers)
+                {
+                    <option>@supplier</option>
+                }
+            </select>
+            <input type="submit" value="Search" class="btn btn-secondary rounded" />
+        </p>
+        <input type="hidden" id="hfPageIndex" name="pageIndex"/>
+    </form>
+
+    <ul class="list-group">
+        @foreach (var purchase in Model.DataList)
+        {
+            <li class="list-group-item list-group-item-action list-group-item-light">
+                <a asp-action="Details" asp-route-id="@purchase.Id">
+                    <div class="container-fluid">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td>@purchase.Code</td>
+                                    <td>@purchase.Supplier</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+
+<div class="container m-3">
+    @for (int i = 1; i <=Model.PageCount; i++)
+    {
+        @if (i != Model.CurrentPageIndex)
+        {
+            <a class="btn btn-outline-info" href="javascript:PagerClick(@i)">@i</a>
+        }
+        else
+        {
+            <span class="btn btn-info">@i</span>
+        }
+    }
+</div>

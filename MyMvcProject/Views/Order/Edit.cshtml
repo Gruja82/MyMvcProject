@@ -1,0 +1,123 @@
+﻿@using MyMvcProject.Data.Entities
+
+@model OrderViewModel
+
+@{
+    List<string> customerList = ViewData["Customers"] as List<string>;
+    List<Product> productlist = ViewData["Products"] as List<Product>;
+    string error = ViewData["Error"] as string;
+    float totalValue = 0;
+}
+
+<h1 class="text-center">Edit order "@Model.Code"</h1>
+
+<div style="width:100%">
+    <form asp-action="Edit" method="post">
+        <div style="width:50%;float:left">
+            <h4 class="text-center">General Info</h4>
+            <hr class="btn-info mt-3" />
+            <div class="row">
+                <div class="form-group">
+                    <label>Code</label>
+                    <input type="text" asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <hr class="btn-info mt-3" />
+                <div class="form-group">
+                    <label>Order Date</label>
+                    <input type="date" asp-for="OrderDate" class="form-control" />
+                    <span asp-validation-for="OrderDate" class="text-danger"></span>
+                </div>
+                <hr class="btn-info mt-3" />
+                <div class="form-group">
+                    <label>Required Date</label>
+                    <input type="date" asp-for="RequiredDate" class="form-control" />
+                    <span asp-validation-for="RequiredDate" class="text-danger"></span>
+                </div>
+                <hr class="btn-info mt-3" />
+                <div class="form-group">
+                    <label>Customer</label>
+                    <select asp-for="Customer" class="form-control">
+                        @foreach (var customer in customerList)
+                        {
+                            <option>@customer</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Customer" class="text-center"></span>
+                </div>
+                <hr class="btn-info mt-3" />
+                <div class="form-group">
+                    Completed? <input type="checkbox" asp-for="Completed" class="form-check-inline" />
+                </div>
+            </div>
+        </div>
+        <div style="width:50%;float:right">
+            <h4 class="text-center">Product List</h4>
+            <hr class="btn-info mt-3" />
+            <div class="row">
+                <div style="overflow-y:scroll;height:400px;" class="ml-3">
+                    <div id="orderDetails">
+
+                    </div>
+                </div>
+
+                <div>
+                    <select id="lstProducts" class="form-control-sm ml-3">
+                        @foreach (var product in productlist)
+                        {
+                            <option>@product.Name</option>
+                        }
+                    </select>
+
+                    <input type="number" id="inputQuantity" class="form-control-sm mt-3 ml-3" />
+
+                    <input type="button" id="btnAdd" value="Add" onclick="addOrderEditRow()" class="btn btn-primary rounded ml-3" />
+
+
+                </div>
+
+                <select id="lstPrice" hidden>
+                    @foreach (var product in productlist)
+                    {
+                        <option>@product.Price</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input id="inputTotal" readonly value="0" class="form-control" />
+        </div>
+
+        <input readonly class="form-control text-danger" value="@ViewData["Error"]" />
+
+        <div>
+            <input type="submit" value="Save Changes" class="btn btn-primary rounded mt-3" />
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        window.onload = (function() {
+        @if (Model.OrderDetailList !=null)
+        {
+            @foreach (var item in Model.OrderDetailList)
+            {
+                Product productItem = productlist.Where(e => e.Name == item.Product).Single();
+                totalValue += productItem.Price * item.Quantity;
+
+                <text>
+                        populateOrderRows("@item.Product", @item.Quantity);
+                    populateOrderTotal(@totalValue);
+                </text>
+            }
+        }
+
+                                        });
+
+
+    </script>
+
+
+</div>
+
+<script src="~/js/order.js" asp-append-version="true"></script>

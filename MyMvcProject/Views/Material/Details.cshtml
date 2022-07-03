@@ -1,0 +1,47 @@
+﻿@model MaterialViewModel
+
+<h1 class="text-center">Details for "@Model.Name"</h1>
+
+<div class="text-lg-end">
+    <a asp-action="Create" class="btn btn-primary rounded">Create New</a>
+</div>
+
+<div class="row">
+    <div class="form-group">
+        <img src="@Url.Content("/images/Materials/" + @Model.ImagePath)" width="300" height="300" id="imgControl" />
+    </div>
+    <hr class="btn-info mt-3" />
+    <div class="form-group">
+        <label>Code</label>
+        <input asp-for="Code" readonly class="form-control" />
+    </div>
+    <hr class="btn-info mt-3" />
+    <div class="form-group">
+        <label>Name</label>
+        <input asp-for="Name" readonly class="form-control" />
+    </div>
+    <hr class="btn-info mt-3" />
+    <div class="form-group">
+        <label>Category</label>
+        <input asp-for="Category" readonly class="form-control" />
+    </div>
+    <hr class="btn-info mt-3" />
+    <div class="form-group">
+        <label>In Stock</label>
+        <input asp-for="InStock" readonly class="form-control" />
+    </div>
+    <hr class="btn-info mt-3" />
+    <div class="form-group">
+        <label>Price</label>
+        <input asp-for="Price" readonly class="form-control" />
+    </div>
+    <hr class="btn-info mt-3" />
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary rounded">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger rounded">Delete</a>
+</div>
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-primary rounded">Back to Index</a>
+</div>

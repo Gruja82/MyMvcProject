@@ -1,0 +1,123 @@
+﻿@using MyMvcProject.Data.Entities
+
+@model PurchaseViewModel
+
+@{
+    List<string> supplierList = ViewData["Suppliers"] as List<string>;
+    List<Material> materialList = ViewData["Materials"] as List<Material>;
+    string error = ViewData["Error"] as string;
+    float totalValue = 0;
+}
+
+<h1 class="text-center">Edit purchase "@Model.Code"</h1>
+
+<div style="width:100%">
+    <form asp-action="Edit" method="post">
+        <div style="width:50%;float:left">
+            <h4 class="text-center">General Info</h4>
+            <hr class="btn-info mt-3" />
+            <div class="row">
+                <div class="form-group">
+                    <label>Code</label>
+                    <input type="text" asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <hr class="btn-info mt-3" />
+                <div class="form-group">
+                    <label>Purchase Date</label>
+                    <input type="date" asp-for="PurchaseDate" class="form-control" />
+                    <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                </div>
+                <hr class="btn-info mt-3" />
+                <div class="form-group">
+                    <label>Required Date</label>
+                    <input type="date" asp-for="RequiredDate" class="form-control" />
+                    <span asp-validation-for="RequiredDate" class="text-danger"></span>
+                </div>
+                <hr class="btn-info mt-3" />
+                <div class="form-group">
+                    <label>Supplier</label>
+                    <select asp-for="Supplier" class="form-control">
+                        @foreach (var supplier in supplierList)
+                        {
+                            <option>@supplier</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Supplier" class="text-center"></span>
+                </div>
+                <hr class="btn-info mt-3" />
+                <div class="form-group">
+                    Completed? <input type="checkbox" asp-for="Completed" class="form-check-inline" />
+                </div>
+            </div>
+        </div>
+        <div style="width:50%;float:right">
+            <h4 class="text-center">Material List</h4>
+            <hr class="btn-info mt-3" />
+            <div class="row">
+                <div style="overflow-y:scroll;height:400px;" class="ml-3">
+                    <div id="purchaseDetails">
+
+                    </div>
+                </div>
+
+                <div>
+                    <select id="lstMaterials" class="form-control-sm ml-3">
+                        @foreach (var material in materialList)
+                        {
+                            <option>@material.Name</option>
+                        }
+                    </select>
+
+                    <input type="number" id="inputQuantity" class="form-control-sm mt-3 ml-3" />
+
+                    <input type="button" id="btnAdd" value="Add" onclick="addPurchaseEditRow()" class="btn btn-primary rounded ml-3" />
+
+
+                </div>
+
+                <select id="lstPrice" hidden>
+                    @foreach (var material in materialList)
+                    {
+                        <option>@material.Price</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input id="inputTotal" readonly value="0" class="form-control" />
+        </div>
+
+        <input readonly class="form-control text-danger" value="@ViewData["Error"]" />
+
+        <div>
+            <input type="submit" value="Save Changes" class="btn btn-primary rounded mt-3" />
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        window.onload = (function() {
+        @if (Model.PurchaseDetailList !=null)
+        {
+            @foreach (var item in Model.PurchaseDetailList)
+            {
+                Material materialItem = materialList.Where(e => e.Name == item.Material).Single();
+                totalValue += materialItem.Price * item.Quantity;
+
+                <text>
+                        populatePurchaseRows("@item.Material", @item.Quantity);
+                    populatePurchaseTotal(@totalValue);
+                </text>
+            }
+        }
+
+                                        });
+
+
+    </script>
+
+
+</div>
+
+<script src="~/js/purchases.js" asp-append-version="true"></script>

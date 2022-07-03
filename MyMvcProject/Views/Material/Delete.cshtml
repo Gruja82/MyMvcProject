@@ -1,0 +1,40 @@
+﻿@model MaterialViewModel
+
+<h1 class="text-center">Delete Material "@Model.Name"?</h1>
+
+<div class="row">
+    <div class="form-group">
+        <img src="@Url.Content("/images/Materials/" + @Model.ImagePath)" width="300" height="300" id="imgControl" />
+    </div>
+    <hr class="btn-info mt-3" />
+    <div class="form-group">
+        <label>Code</label>
+        <input asp-for="Code" readonly class="form-control" />
+    </div>
+    <hr class="btn-info mt-3" />
+    <div class="form-group">
+        <label>Name</label>
+        <input asp-for="Name" readonly class="form-control" />
+    </div>
+    <hr class="btn-info mt-3" />
+    <div class="form-group">
+        <label>Category</label>
+        <input asp-for="Category" readonly class="form-control" />
+    </div>
+    <hr class="btn-info mt-3" />
+    <div class="form-group">
+        <label>In Stock</label>
+        <input asp-for="InStock" readonly class="form-control" />
+    </div>
+    <hr class="btn-info mt-3" />
+    <div class="form-group">
+        <label>Price</label>
+        <input asp-for="Price" readonly class="form-control" />
+    </div>
+    <hr class="btn-info mt-3" />
+</div>
+
+<form asp-action="Delete" method="post" class="mt-3">
+    <input type="submit" class="btn btn-danger rounded" value="Delete" onclick="return confirm('Are you sure you want to delete this material?')" />
+    <a asp-action="Index" class="btn btn-primary rounded">Back to Index</a>
+</form>

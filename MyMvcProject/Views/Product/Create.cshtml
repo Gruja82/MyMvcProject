@@ -1,0 +1,104 @@
+﻿@using MyMvcProject.Data.Entities
+@model ProductViewModel
+
+@{
+    List<string> categories = ViewData["Categories"] as List<string>;
+    List<Material> materials = ViewData["Materials"] as List<Material>;
+}
+
+<h1 class="text-center">Create new product</h1>
+
+<div style="width:100%">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div style="width:50%;float:left">
+            <h4 class="text-center">General Info</h4>
+            <hr class="btn-info mt-3" />
+
+            <div class="form-group">
+                <img width="300" height="200" asp-append-version="true" id="imgControl" />
+            </div>
+            <div class="form-group">
+                <input type="file" asp-for="@Model.Image" class="form-control" id="inputControl" onchange="setSrc()" />
+            </div>
+            <hr class="btn-info mt-3" />
+            <div class="form-group">
+                <label>Code</label>
+                <input type="text" asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <hr class="btn-info mt-3" />
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <hr class="btn-info mt-3" />
+            <div class="form-group">
+                <label>Category</label>
+                <select asp-for="Category" class="form-control">
+                    @foreach (var category in categories)
+                    {
+                        <option>@category</option>
+                    }
+                </select>
+            </div>
+            <hr class="btn-info mt-3" />
+            <div class="form-group">
+                <label>In Stock</label>
+                <input asp-for="InStock" value="0" readonly class="form-control" />
+                <span asp-validation-for="InStock" class="text-danger"></span>
+            </div>
+            <hr class="btn-info mt-3" />
+            <div class="form-group">
+                <label>Price</label>
+                <input  asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <hr class="btn-info mt-3" />
+        </div>
+
+        <div style="width:50%;float:right">
+            <h4 class="text-center">Specification</h4>
+            <hr class="btn-info mt-3" />
+
+            <div class="row">
+                <div style="overflow-y:scroll;height:400px;" class="ml-3">
+                    <div id="productDetails">
+
+                    </div>
+                </div>
+
+                <div>
+                    <select id="lstMaterials" class="form-control-sm ml-3">
+                        @foreach (var material in materials)
+                        {
+                            <option>@material.Name</option>
+                        }
+                    </select>
+
+                    <input id="inputQuantity" class="form-control-sm mt-3 ml-3" />
+                    <input type="button" id="btnAdd" value="Add" onclick="addProductRow()" class="btn btn-primary rounded ml-3" />
+                </div>
+
+                <select id="lstPrice" hidden>
+                    @foreach (var material in materials)
+                    {
+                        <option>@material.Price</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input id="inputTotal" readonly value="0" class="form-control"/>
+        </div>
+
+        <input readonly class="form-control text-danger" value="@ViewData["Error"]" />
+
+        <div>
+            <input type="submit" value="Create" class="btn btn-primary rounded mt-3" />
+        </div>
+    </form>
+</div>
+
+<script src="~/js/products.js" asp-append-version="true"></script>
